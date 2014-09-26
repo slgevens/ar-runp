@@ -1,0 +1,37 @@
+#!/usr/bin/python
+# -*- Mode: python; mmm-classes: (embedded-yaml); -*-
+
+DOCUMENTATION = '''
+---
+module: runp
+short_description: Allow conditionnal based on --check option
+description:
+  - Set dry_mode ansible_facts to check_mode
+  - Set run_mode ansible_facts to not check_mode
+options:
+notes: []
+requirements: [ ]
+author: Thierry Delamare
+...
+'''
+
+EXAMPLES = '''
+---
+- runp:
+- debug: msg="Not when in check mode"
+  when: run_mode
+...
+'''
+
+def main():
+    module = AnsibleModule(
+        argument_spec = dict(),
+        supports_check_mode=True
+    )
+
+    module.exit_json(changed=False, ansible_facts={ 'dry_mode': module.check_mode, 'run_mode': not module.check_mode })
+
+# this is magic, see lib/ansible/module_common.py
+#<<INCLUDE_ANSIBLE_MODULE_COMMON>>
+
+main()
